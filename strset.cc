@@ -5,11 +5,14 @@
 #include <cstdlib>
 #include <climits>
 #include <stdexcept>
+#include <iostream>
 
 using std::map;
 using std::set;
 using std::string;
 using std::runtime_error;
+using std::cerr;
+using std::endl;
 
 const set<string> emptyset;
 const int NUMBER_OF_TRIES_TO_GET_RANDOM_ID = 5;
@@ -24,6 +27,7 @@ int get_unused_id();
 unsigned long strset_new()
 {
 	int id = get_unused_id();
+	sets[id];
 	return id;
 }
 
@@ -146,14 +150,14 @@ int get_unused_id()
 	for (int i = 0; i < NUMBER_OF_TRIES_TO_GET_RANDOM_ID; i++)
 	{
 		id = rand();
-		if (set_exists(id))
+		if (!set_exists(id))
 		{
 			return id;
 		}
 	}
 	for (int i = INT_MIN; i < INT_MAX; i++)
 	{
-		if (set_exists(id))
+		if (!set_exists(id))
 		{
 			return i;
 		}
