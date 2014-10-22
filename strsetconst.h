@@ -1,0 +1,1 @@
+const unsigned long strset42;
