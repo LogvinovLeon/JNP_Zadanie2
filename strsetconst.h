@@ -1,1 +1,3 @@
-const unsigned long strset42 = 42;
+#pragma once
+
+extern const unsigned long strset42;

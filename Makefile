@@ -1,8 +1,7 @@
 C = gcc
 CC = g++
-CCFLAGS = -c -Wall -pedantic -std=c++11 -DDEBUG_LEVEL=$(debuglevel)
+CCFLAGS = -c -Wall -Wextra -pedantic -std=c++11 -DDEBUG_LEVEL=$(debuglevel)
 CFLAGS = $(CCFLAGS)
-#Add Wextra later
 
 all: strset_test1
 

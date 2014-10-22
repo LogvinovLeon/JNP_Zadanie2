@@ -40,7 +40,7 @@ unsigned long strset_new()
 
 void strset_delete(unsigned long id)
 {
-	if (id == 42)return;
+	if (id == strset42)return;
 	if (set_exists(id))
 	{
 		getSets().erase(id);
@@ -65,7 +65,7 @@ size_t strset_size(unsigned long id)
 
 void strset_insert(unsigned long id, const char *value)
 {
-	if (id == 42)return;
+	if (id == strset42)return;
 	if (set_exists(id))
 	{
 		getSets()[id].insert(string(value));
@@ -77,7 +77,7 @@ void strset_insert(unsigned long id, const char *value)
 
 void strset_remove(unsigned long id, const char *value)
 {
-	if (id == 42)return;
+	if (id == strset42)return;
 	if (strset_test(id, value))
 	{
 		getSets()[id].erase(string(value));
@@ -106,7 +106,7 @@ int strset_test(unsigned long id, const char *value)
 
 void strset_clear(unsigned long id)
 {
-	if (id == 42)return;
+	if (id == strset42)return;
 	if (set_exists(id))
 	{
 		getSets()[id].clear();
