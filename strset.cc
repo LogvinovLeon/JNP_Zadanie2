@@ -1,4 +1,5 @@
 #include "strset.h"
+#include "strsetconst.h"
 #include <set>
 #include <map>
 #include <string>
@@ -12,30 +13,37 @@ using std::set;
 using std::string;
 using std::runtime_error;
 using std::cerr;
+using std::cout;
 using std::endl;
+using std::pair;
 
 const set<string> emptyset;
 const int NUMBER_OF_TRIES_TO_GET_RANDOM_ID = 5;
-
-map<int, set<string> > sets;
 
 int set_comparator(set<string> first, set<string> second);
 bool set_exists(int id);
 int get_unused_id();
 
+map<int, set<string> > &getSets()
+{
+	static map<int, set<string> > *sets = new map<int, set<string> >();
+	sets->insert(pair<int, set<string>>(strset42, {"42"}));
+	return *sets;
+}
 
 unsigned long strset_new()
 {
 	int id = get_unused_id();
-	sets[id];
+	getSets()[id];
 	return id;
 }
 
 void strset_delete(unsigned long id)
 {
+	if (id == 42)return;
 	if (set_exists(id))
 	{
-		sets.erase(id);
+		getSets().erase(id);
 	}
 	else
 	{
@@ -47,7 +55,7 @@ size_t strset_size(unsigned long id)
 {
 	if (set_exists(id))
 	{
-		return sets[id].size();
+		return getSets()[id].size();
 	}
 	else
 	{
@@ -57,9 +65,10 @@ size_t strset_size(unsigned long id)
 
 void strset_insert(unsigned long id, const char *value)
 {
+	if (id == 42)return;
 	if (set_exists(id))
 	{
-		sets[id].insert(string(value));
+		getSets()[id].insert(string(value));
 	}
 	else
 	{
@@ -68,9 +77,10 @@ void strset_insert(unsigned long id, const char *value)
 
 void strset_remove(unsigned long id, const char *value)
 {
+	if (id == 42)return;
 	if (strset_test(id, value))
 	{
-		sets[id].erase(string(value));
+		getSets()[id].erase(string(value));
 	}
 }
 
@@ -79,7 +89,7 @@ int strset_test(unsigned long id, const char *value)
 	if (set_exists(id))
 	{
 		string svalue(value);
-		if (sets[id].find(svalue) != sets[id].end())
+		if (getSets()[id].find(svalue) != getSets()[id].end())
 		{
 			return 1;
 		}
@@ -96,9 +106,10 @@ int strset_test(unsigned long id, const char *value)
 
 void strset_clear(unsigned long id)
 {
+	if (id == 42)return;
 	if (set_exists(id))
 	{
-		sets[id].clear();
+		getSets()[id].clear();
 	}
 	else
 	{
@@ -116,18 +127,18 @@ int strset_comp(unsigned long id1, unsigned long id2)
 		}
 		else
 		{
-			return set_comparator(emptyset, sets[id2]);
+			return set_comparator(emptyset, getSets()[id2]);
 		}
 	}
 	else
 	{
 		if (!set_exists(id2))
 		{
-			return set_comparator(sets[id1], emptyset);
+			return set_comparator(getSets()[id1], emptyset);
 		}
 		else
 		{
-			return (sets[id1] > sets[id2]) - (sets[id1] < sets[id2]);
+			return (getSets()[id1] > getSets()[id2]) - (getSets()[id1] < getSets()[id2]);
 		}
 	}
 }
@@ -141,7 +152,7 @@ int set_comparator(set<string> first, set<string> second)
 
 bool set_exists(int id)
 {
-	return sets.find(id) != sets.end();
+	return getSets().find(id) != getSets().end();
 }
 
 int get_unused_id()

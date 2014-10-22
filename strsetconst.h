@@ -1,1 +1,1 @@
-const unsigned long strset42;
+const unsigned long strset42 = 42;

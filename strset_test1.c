@@ -48,7 +48,7 @@ int main()
 	strset_delete(s3);
 	assert(strset_comp(s2, s3) == 0);
 
-	/*assert(strset_size(strset42) == 1);
+	assert(strset_size(strset42) == 1);
 	strset_delete(strset42);
 	strset_insert(strset42, "66");
 	assert(strset_size(strset42) == 1);
@@ -59,7 +59,7 @@ int main()
 	strset_remove(strset42, "42");
 	assert(strset_size(strset42) == 1);
 	strset_clear(strset42);
-	assert(strset_size(strset42) == 1);*/
+	assert(strset_size(strset42) == 1);
 
 	return 0;
 }
