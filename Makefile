@@ -1,6 +1,11 @@
+ifeq ($(debuglevel),1)
+	CCFLAGS = -c -O0 -g -Wall -Wextra -pedantic -std=c++11 -DDEBUG_LEVEL=1
+else
+	CCFLAGS = -c -O2 -Wall -Wextra -pedantic -std=c++11 -DDEBUG_LEVEL=0
+endif
 C = gcc
 CC = g++
-CCFLAGS = -c -Wall -Wextra -pedantic -std=c++11 -DDEBUG_LEVEL=$(debuglevel)
+
 CFLAGS = $(CCFLAGS)
 
 all: strset_test1
