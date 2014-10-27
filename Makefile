@@ -1,11 +1,10 @@
 ifeq ($(debuglevel),1)
-	CCFLAGS = -c -O0 -g -Wall -Wextra -pedantic -std=c++11 -DDEBUG_LEVEL=1
+	CCFLAGS = -c -O0 -g -Wall -Wextra -pedantic -DDEBUG_LEVEL=1
 else
-	CCFLAGS = -c -O2 -Wall -Wextra -pedantic -std=c++11 -DDEBUG_LEVEL=0
+	CCFLAGS = -c -O2 -Wall -Wextra -pedantic -DDEBUG_LEVEL=0
 endif
 C = gcc
 CC = g++
-
 CFLAGS = $(CCFLAGS)
 
 all: strset_test1
@@ -17,7 +16,7 @@ strset_test1: strset_test1.o strset.o strsetconst.o
 	$(C) $(CFLAGS) $< -o $@
 
 .cc.o:
-	$(CC) $(CCFLAGS) $< -o $@
+	$(CC) $(CCFLAGS) -std=c++11 $< -o $@
 
 clean:
 	rm -rf *.o strset_test1
