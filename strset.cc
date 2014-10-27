@@ -7,24 +7,39 @@
 #include <climits>
 #include <stdexcept>
 #include <iostream>
+#include <sstream>
 
 using std::map;
 using std::set;
 using std::string;
 using std::runtime_error;
+using std::stringstream;
 using std::cerr;
 using std::cout;
 using std::endl;
 using std::pair;
 
+#if DEBUG_LEVEL == 1
+	static const bool debug = 1;
+#else
+	static const bool debug = 0;
+#endif
+
 const set<string> emptyset;
 const int NUMBER_OF_TRIES_TO_GET_RANDOM_ID = 5;
 
-int set_comparator(set<string> first, set<string> second);
-bool set_exists(int id);
-int get_unused_id();
+static int set_comparator(set<string> first, set<string> second);
+static bool set_exists(int id);
+static int get_unused_id();
 
-map<int, set<string> > &getSets()
+static void log(string s)
+{
+	if (debug == 0)
+		return;
+	cout << s << endl;
+}
+
+static map<int, set<string> > &getSets()
 {
 	static map<int, set<string> > *sets = new map<int, set<string> >();
 	sets->insert(pair<int, set<string>>(strset42, {"42"}));
@@ -53,6 +68,9 @@ void strset_delete(unsigned long id)
 
 size_t strset_size(unsigned long id)
 {
+	stringstream ss;
+	ss << __func__ << "(" << id << ")";
+	log(ss.str());
 	if (set_exists(id))
 	{
 		return getSets()[id].size();
@@ -72,6 +90,7 @@ void strset_insert(unsigned long id, const char *value)
 	}
 	else
 	{
+		
 	}
 }
 
@@ -143,19 +162,19 @@ int strset_comp(unsigned long id1, unsigned long id2)
 	}
 }
 
-int set_comparator(set<string> first, set<string> second)
+static int set_comparator(set<string> first, set<string> second)
 {
 	if (first < second) return -1;
 	if (first == second) return 0;
 	return 1;
 }
 
-bool set_exists(int id)
+static bool set_exists(int id)
 {
 	return getSets().find(id) != getSets().end();
 }
 
-int get_unused_id()
+static int get_unused_id()
 {
 	int id = -1;
 	for (int i = 0; i < NUMBER_OF_TRIES_TO_GET_RANDOM_ID; i++)
