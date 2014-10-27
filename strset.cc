@@ -83,28 +83,75 @@ size_t strset_size(unsigned long id)
 
 void strset_insert(unsigned long id, const char *value)
 {
-	if (id == strset42)return;
+	stringstream ss;
+	ss << __func__ << "(" << id <<", " << value << ")";
+	log(ss.str());
+	if (id == strset42)
+	{
+		log("strset_insert: attempt to insert into the 42 set");
+		return;
+	}
 	if (set_exists(id))
 	{
+		if(getSets()[id].find(string(value)) != getSets()[id].end())
+		{
+			stringstream ss;
+			ss << __func__ << ": set " << id << ", element \"" << value << "\" was already present";
+			log(ss.str());
+		}
+		else
+		{
+			ss << __func__ << ": set " << id << ", element \"" << value << "\" inserted";
+			log(ss.str());
+		}
 		getSets()[id].insert(string(value));
+		
 	}
 	else
 	{
-		
+		stringstream ss;
+		ss<< __func__ << ": set " << id << " does not exist";
+		log(ss.str());
 	}
 }
 
 void strset_remove(unsigned long id, const char *value)
 {
-	if (id == strset42)return;
+	stringstream ss;
+	ss << __func__ << "(" << id << ", " << value << ")";
+	log(ss.str());
+	if (id == strset42)
+	{
+		log("strset_remove: atempt to remove from the 42 set");
+		return;
+	}
 	if (strset_test(id, value))
 	{
+		if(getSets()[id].find(string(value)) == getSets()[id].end())
+		{
+			stringstream ss;
+			ss << __func__ << ": set " << id << " does not contain the element \""<< value <<"\"";
+			log(ss.str());
+		}
+		else
+		{
+			stringstream ss;
+			ss << __func__ <<": set " << id << ", element " << value << "removed";
+			log(ss.str());
+		}	
 		getSets()[id].erase(string(value));
+	}
+	else
+	{
+		stringstream ss;
+		ss << __func__ << ": set " << id << " does not exist"; 
+		log(ss.str());
 	}
 }
 
 int strset_test(unsigned long id, const char *value)
 {
+
 	if (set_exists(id))
 	{
 		string svalue(value);
