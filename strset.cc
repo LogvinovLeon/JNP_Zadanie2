@@ -52,7 +52,14 @@ inline static void n_exist_err(int id, string func)
 static map<int, set<string> > &getSets()
 {
 	static map<int, set<string> > *sets = new map<int, set<string> >();
-	sets->insert(pair<int, set<string>>(strset42, {"42"}));
+	if(sets->find(strset42) == sets->end())
+	{
+		log("strsetconst init invoked");
+		sets->insert(pair<int, set<string>>(strset42, {"42"}));
+		log("set 42 created");
+		log("stresetconst init finished");
+		
+	}
 	return *sets;
 }
 
