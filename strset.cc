@@ -18,6 +18,7 @@ using std::cerr;
 using std::cout;
 using std::endl;
 using std::pair;
+using std::to_string;
 
 #if DEBUG_LEVEL == 1
 	static const bool debug = 1;
@@ -28,9 +29,12 @@ using std::pair;
 const set<string> emptyset;
 const int NUMBER_OF_TRIES_TO_GET_RANDOM_ID = 5;
 
+
 static int set_comparator(set<string> first, set<string> second);
 static bool set_exists(int id);
 static int get_unused_id();
+static bool contains(int id, string element);
+
 
 static void log(string s)
 {
@@ -38,6 +42,12 @@ static void log(string s)
 		return;
 	cout << s << endl;
 }
+
+inline static void n_exist_err(int id, string func)
+{
+	log(func + ": set " + to_string(id) + " does not exist");
+}
+
 
 static map<int, set<string> > &getSets()
 {
@@ -48,44 +58,50 @@ static map<int, set<string> > &getSets()
 
 unsigned long strset_new()
 {
+	log(string(__func__) + "()");
 	int id = get_unused_id();
 	getSets()[id];
+	log(string(__func__) + ": created a new set with the id of " + to_string(id));
 	return id;
 }
 
 void strset_delete(unsigned long id)
 {
-	if (id == strset42)return;
+	log(string(__func__) + "(" + to_string(id) + ")");
+	if (id == strset42)
+	{
+		log(string(__func__) + ": trying to delete the 42 set");
+		return;
+	}
 	if (set_exists(id))
 	{
+		log(string(__func__) + ": set " + to_string(id) + " deleted");
 		getSets().erase(id);
 	}
 	else
 	{
-
+		n_exist_err(id, string(__func__));
 	}
 }
 
 size_t strset_size(unsigned long id)
 {
-	stringstream ss;
-	ss << __func__ << "(" << id << ")";
-	log(ss.str());
+	log(string(__func__)  + "(" + to_string(id) + ")");
 	if (set_exists(id))
 	{
+		log(string(__func__) + ": set " + to_string(id) + " contains " + to_string(getSets()[id].size()) + " element(s)");
 		return getSets()[id].size();
 	}
 	else
 	{
+		n_exist_err(id, string(__func__));
 		return 0;
 	}
 }
 
 void strset_insert(unsigned long id, const char *value)
 {
-	stringstream ss;
-	ss << __func__ << "(" << id <<", " << value << ")";
-	log(ss.str());
+	log(string(__func__) + "(" + to_string(id) + ", " + value + ")");
 	if (id == strset42)
 	{
 		log("strset_insert: attempt to insert into the 42 set");
@@ -93,102 +109,101 @@ void strset_insert(unsigned long id, const char *value)
 	}
 	if (set_exists(id))
 	{
-		if(getSets()[id].find(string(value)) != getSets()[id].end())
+		if(contains(id, string(value)))
 		{
-			stringstream ss;
-			ss << __func__ << ": set " << id << ", element \"" << value << "\" was already present";
-			log(ss.str());
+			log(string(__func__) + ": set " + to_string(id) + ", element \"" + value + "\" was already present");
 		}
 		else
 		{
-			ss << __func__ << ": set " << id << ", element \"" << value << "\" inserted";
-			log(ss.str());
+			log( string(__func__) + ": set " + to_string(id) + ", element \"" + value + "\" inserted");
 		}
 		getSets()[id].insert(string(value));
 		
 	}
 	else
 	{
-		stringstream ss;
-		ss<< __func__ << ": set " << id << " does not exist";
-		log(ss.str());
+		n_exist_err(id, string(__func__));
 	}
 }
 
 void strset_remove(unsigned long id, const char *value)
 {
-	stringstream ss;
-	ss << __func__ << "(" << id << ", " << value << ")";
-	log(ss.str());
+	log(string(__func__) + "(" + to_string(id) + ", " + value + ")");
 	if (id == strset42)
 	{
 		log("strset_remove: atempt to remove from the 42 set");
 		return;
 	}
-	if (strset_test(id, value))
+	if (set_exists(id))
 	{
-		if(getSets()[id].find(string(value)) == getSets()[id].end())
+		if(!contains(id, string(value)))
 		{
-			stringstream ss;
-			ss << __func__ << ": set " << id << " does not contain the element \""<< value <<"\"";
-			log(ss.str());
+			log(string(__func__) + ": set " + to_string(id) + " does not contain the element \"" + value  + "\"");
 		}
 		else
 		{
-			stringstream ss;
-			ss << __func__ <<": set " << id << ", element " << value << "removed";
-			log(ss.str());
+			log(string( __func__) + ": set " +  to_string(id) + ", element \"" + value + "\" removed");
 		}	
 		getSets()[id].erase(string(value));
 	}
 	else
 	{
-		stringstream ss;
-		ss << __func__ << ": set " << id << " does not exist"; 
-		log(ss.str());
+		n_exist_err(id, string(__func__));
 	}
 }
 
 int strset_test(unsigned long id, const char *value)
 {
-
+	log(string(__func__) + "(" + to_string(id) + ", " + value + ")");
 	if (set_exists(id))
 	{
 		string svalue(value);
-		if (getSets()[id].find(svalue) != getSets()[id].end())
+		if (contains(id, string(value)))
 		{
+			log(string(__func__) + ": set " + to_string(id) + " contains the element \"" + value + "\""); 
 			return 1;
 		}
 		else
 		{
+			log(string(__func__) + ": set " + to_string(id) + " does not contain the element \"" + value + "\"");
 			return 0;
 		}
 	}
 	else
 	{
+		n_exist_err(id, string(__func__));
 		return 0;
 	}
 }
 
 void strset_clear(unsigned long id)
 {
-	if (id == strset42)return;
+	log(string(__func__) + "(" + to_string(id) + ")");
+	if (id == strset42)
+	{
+		log(string(__func__) + ": trying to clear the 42 set");
+		return;
+	}
 	if (set_exists(id))
 	{
+		log(string(__func__) + ": set " + to_string(id) + " is now empty");
 		getSets()[id].clear();
 	}
 	else
 	{
-
+		n_exist_err(id, string(__func__));
 	}
 }
 
 int strset_comp(unsigned long id1, unsigned long id2)
 {
+	log(string(__func__) + "(" + to_string(id1) + ", " + to_string(id2) + ")");
 	if (!set_exists(id1))
 	{
+		n_exist_err(id1, string(__func__));
 		if (!set_exists(id2))
 		{
+			n_exist_err(id2, string(__func__));
 			return 0;
 		}
 		else
@@ -200,13 +215,17 @@ int strset_comp(unsigned long id1, unsigned long id2)
 	{
 		if (!set_exists(id2))
 		{
+			n_exist_err(id2, string(__func__));
 			return set_comparator(getSets()[id1], emptyset);
 		}
 		else
 		{
-			return (getSets()[id1] > getSets()[id2]) - (getSets()[id1] < getSets()[id2]);
+			int ans = set_comparator(getSets()[id1], getSets()[id2]);
+			log(string(__func__) + ": the result of comparing set " + to_string(id1) + " to set " + to_string(id2) + " is " + to_string(ans));		
+			return ans;
 		}
 	}
+	
 }
 
 static int set_comparator(set<string> first, set<string> second)
@@ -240,4 +259,9 @@ static int get_unused_id()
 		}
 	}
 	throw runtime_error("can't find empty index for creating new set");
+}
+
+static bool contains(int id, string element)
+{
+	return (getSets()[id].find(element) != getSets()[id].end()); 
 }
