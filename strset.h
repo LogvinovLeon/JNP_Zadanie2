@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _STR_SET_
+#define _STR_SET_
 
 #include <stddef.h>
 
@@ -24,4 +25,6 @@ int strset_comp(unsigned long id1, unsigned long id2);
 
 #ifdef __cplusplus
 }
+#endif
+
 #endif
